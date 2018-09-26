@@ -1,0 +1,167 @@
+---
+type: install
+version: 1.5
+name: Jahia - Digital Experience Manager
+logo: /images/jahia-logo-70x70.png
+id: jahia-dem
+description:
+  short: Jahia - Digital Experience Manager
+  text: Digital Experience Manager gives you an agile customizable platform that manages
+    your entire digital ecosystem to innovate and deliver great customer experiences,
+    foster internal collaboration and support dynamic business needs for sustainable
+    growth.
+baseUrl: https://raw.githubusercontent.com/Jahia/jelastic-package-dev/master
+globals:
+  db_user: jahia-db-${fn.random}
+  db_pass: ${fn.password(20)}
+  redis_pass: ${fn.password(20)}
+  mngr_user: manager
+  mngr_pass: ${settings.toolspwd}
+  su_pass: ${settings.rootpwd}
+  xms: 2G
+  java_opts:
+    -DDB_USER=${DB_USER}
+    -DDB_PASSWORD=${DB_PASSWORD}
+    -DREDIS_PASSWORD=${REDIS_PASSWORD}
+    -DMANAGER_USER=${MANAGER_USER}
+    -DMANAGER_PASSWORD=${MANAGER_PASSWORD}
+    -DSUPER_USER_PASSWORD=${SUPER_USER_PASSWORD}
+    -DHOST_NAME=$(hostname)
+    -XX:MaxPermSize=512m
+  
+ 
+ssl: true
+skipNodeEmails: true
+nodes:  
+
+    
+  - image: jahiadev/processing:7.2.1.1
+    displayName: Processing
+    count: 1
+    cloudlets: 64
+    nodeGroup: proc
+
+    startServiceOnCreation: false
+    env: 
+      DB_USER: ${globals.db_user}
+      DB_PASSWORD: ${globals.db_pass}
+      MANAGER_USER: ${globals.mngr_user}
+      MANAGER_PASSWORD: ${globals.mngr_pass}
+      SUPER_USER_PASSWORD: ${globals.su_pass}
+      REDIS_PASSWORD: ${globals.redis_pass}
+      XMS: ${globals.xms}
+      _JAVA_OPTIONS: ${globals.java_opts}
+      DATADOGAPIKEY: ${settings.ddogApikey}
+
+
+
+
+    
+# --Events --
+
+onInstall: 
+
+
+  
+  - copyApp: proc 
+  - if (settings.skipStart != 'true'):
+    - api: env.control.ExecDockerRunCmd
+      nodeId: ${nodes.proc.first.id} 
+
+  - sleep:
+    - milliseconds: 180000
+  
+  - copyApp: cp
+  - if (settings.skipStart != 'true'): 
+    - forEach(nodes.cp):
+        api: env.control.ExecDockerRunCmd
+        nodeId: ${@i.id} 
+
+  - setupDatadogAgent: cp
+  - setupDatadogAgent: proc
+  - setupDatadogAgent: mysqldb
+
+onBeforeServiceScaleOut[cp]: 
+  forEach(event.response.nodes): 
+    - copyApp: ${@i.id}
+      
+onBeforeServiceScaleOut[unomi]: updateHazelcast
+onBeforeScaleIn[unomi]: updateHazelcast   
+        
+#-- Actions --
+
+actions:
+  updateHazelcast:
+    - forEach(nodes.unomi):
+        appendNode: ${@i.id}
+    
+       
+  appendNode:
+    setGlobals: 
+      - ids: ${globals.ids:}${globals.sep:}${this}
+      - sep: ' '
+         
+
+    
+  setupSqlDB:
+    - cmd[sqldb]: |-
+        service mysql stop
+        wget -O /etc/my.cnf ${baseUrl}/configs/my.cnf
+        service mysql start
+        wget -O setupUser.sh ${baseUrl}/scripts/setupUser.sh
+        bash setupUser.sh ${globals.db_user} ${globals.db_pass}
+      user: root 
+  
+    
+  copyApp:  
+    - cmd[${this}]: |-
+        [ "${this}" == "proc" ] && role="processing" || role="browsing" 
+        rm -rf $STACK_PATH/webapps/*
+        cp -rf $DATA_PATH/jahia/$role/tomcat/webapps/* $STACK_PATH/webapps
+        chown -R tomcat:tomcat $STACK_PATH/webapps
+        
+        cd /opt/tomcat/webapps/ROOT/WEB-INF/lib/
+        mngr_pwd=$(/usr/java/latest/bin/jjs -cp ./jahia-commons-1.0.6.jar:./jasypt-1.9.1-lite.jar -scripting <<< "print(org.jahia.commons.encryption.EncryptionUtils.pbkdf2Digest(\$ENV.MANAGER_PASSWORD, \"p\"))")
+        sed -i "s|^jahiaToolManagerPassword .*$|jahiaToolManagerPassword                               = $mngr_pwd|" $STACK_PATH/conf/digital-factory-config/jahia/jahia.properties
+        sed -i "s#\${HOST_NAME}#$HOSTNAME#g" $STACK_PATH/conf/digital-factory-config/jahia/jahia.node.properties
+        echo $SUPER_USER_PASSWORD > $DATA_PATH/digital-factory-data/root.pwd
+        chown -R tomcat:tomcat $DATA_PATH/digital-factory-data/root.pwd
+        
+  setupDatadogAgent:
+    - if (settings.ddog == 'datadog'):
+        forEach(nodes.${this}):
+          cmd[${@i.id}]: |- 
+            DD_API_KEY=${settings.ddogApikey} bash -c "$(curl -L https://raw.githubusercontent.com/DataDog/datadog-agent/master/cmd/agent/install_script.sh)"
+            echo "hostname: ${this}.${@i.id}" >> /etc/datadog-agent/datadog.yaml
+            sed -i 's/# logs_enabled: false/logs_enabled: true/' /etc/datadog-agent/datadog.yaml
+            wget -O /etc/datadog-agent/conf.d/tomcat.d/conf.yaml https://raw.githubusercontent.com/Jahia/jelastic-package/master/conf.yaml
+            chmod 555 /opt/tomcat/logs/catalina.out -R
+            systemctl restart datadog-agent
+        
+success: /text/success.md
+settings:
+  fields: 
+  - name: rootpwd
+    type: string
+    caption: Jahia DX root password
+    vtype: text
+    required: true
+  - name: toolspwd
+    type: string
+    caption: Jahia tools password
+    vtype: text
+    required: true
+  - name: ddog
+    type: radio-fieldset
+    values:
+      no-datadog: No monitoring
+      datadog: Autoregister in Datadog
+    default: no-datadog
+    showIf:
+      datadog:
+        - name: ddogApikey
+          type: string
+          caption: Datadog API KEY
+          default: 8f0af047f681f99d4d9f98e28b1d2092
+          required: true
+          vtype: text
