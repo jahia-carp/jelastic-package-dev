@@ -33,14 +33,40 @@ globals:
 ssl: true
 skipNodeEmails: true
 nodes:  
-
+  - image: jahiadev/browsing:7.2.1.1
+    displayName: Browsing
+    count: 2
+    cloudlets: 64
+    nodeGroup: cp
+    links: sqldb:mysqldb
+    startServiceOnCreation: false
+    env: 
+      DB_USER: ${globals.db_user}
+      DB_PASSWORD: ${globals.db_pass}
+      MANAGER_USER: ${globals.mngr_user}
+      MANAGER_PASSWORD: ${globals.mngr_pass}
+      SUPER_USER_PASSWORD: ${globals.su_pass}
+      REDIS_PASSWORD: ${globals.redis_pass}
+      XMS: ${globals.xms}
+      _JAVA_OPTIONS: ${globals.java_opts}
+      DATADOGAPIKEY: ${settings.ddogApikey}
+    volumes:
+      - /data/digital-factory-data/generated-resources
+      - /data/digital-factory-data/repository/datastore    
+    volumeMounts: 
+      /data/digital-factory-data/generated-resources:
+        sourceNodeGroup: proc
+      /data/digital-factory-data/repository/datastore:
+        sourceNodeGroup: proc 
     
   - image: jahiadev/processing:7.2.1.1
     displayName: Processing
     count: 1
     cloudlets: 64
     nodeGroup: proc
-
+    links: 
+      - sqldb:mysqldb
+      - nosqldb:redis
     startServiceOnCreation: false
     env: 
       DB_USER: ${globals.db_user}
@@ -55,12 +81,20 @@ nodes:
 
 
 
-
+  - nodeType: mariadb-dockerized
+    tag: 10.2.12 # 10.3.9
+    displayName: MariaDB
+    count: 1
+    cloudlets: 64
+    nodeGroup: sqldb    
+    env:
+      DATADOGAPIKEY: ${settings.ddogApikey}
     
 # --Events --
 
 onInstall: 
-
+  - setupSqlDB
+  - if (settings.skipStart != 'true'): createJahiaDatabase
 
   
   - copyApp: proc 
@@ -111,19 +145,24 @@ actions:
         wget -O setupUser.sh ${baseUrl}/scripts/setupUser.sh
         bash setupUser.sh ${globals.db_user} ${globals.db_pass}
       user: root 
-  
-    
+  createJahiaDatabase:
+    - cmd[sqldb]: |-
+        mysql -u${globals.db_user} -p${globals.db_pass} -e "CREATE DATABASE IF NOT EXISTS jahia CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
+      user: root
+    - cmd[${nodes.proc.first.id}]: cat $DATA_PATH/digital-factory-data/db/sql/schema/mysql/*.sql | mysql -h mysqldb -u$DB_USER -p$DB_PASSWORD -f jahia
+
   copyApp:  
     - cmd[${this}]: |-
         [ "${this}" == "proc" ] && role="processing" || role="browsing" 
         rm -rf $STACK_PATH/webapps/*
-        cp -rf $DATA_PATH/jahia/$role/tomcat/webapps/* $STACK_PATH/webapps
+        cp -rf $DATA_PATH/jahia/tomcat/webapps/* $STACK_PATH/webapps
         chown -R tomcat:tomcat $STACK_PATH/webapps
         
         cd /opt/tomcat/webapps/ROOT/WEB-INF/lib/
         mngr_pwd=$(/usr/java/latest/bin/jjs -cp ./jahia-commons-1.0.6.jar:./jasypt-1.9.1-lite.jar -scripting <<< "print(org.jahia.commons.encryption.EncryptionUtils.pbkdf2Digest(\$ENV.MANAGER_PASSWORD, \"p\"))")
         sed -i "s|^jahiaToolManagerPassword .*$|jahiaToolManagerPassword                               = $mngr_pwd|" $STACK_PATH/conf/digital-factory-config/jahia/jahia.properties
         sed -i "s#\${HOST_NAME}#$HOSTNAME#g" $STACK_PATH/conf/digital-factory-config/jahia/jahia.node.properties
+
         echo $SUPER_USER_PASSWORD > $DATA_PATH/digital-factory-data/root.pwd
         chown -R tomcat:tomcat $DATA_PATH/digital-factory-data/root.pwd
         
@@ -134,7 +173,7 @@ actions:
             DD_API_KEY=${settings.ddogApikey} bash -c "$(curl -L https://raw.githubusercontent.com/DataDog/datadog-agent/master/cmd/agent/install_script.sh)"
             echo "hostname: ${this}.${@i.id}" >> /etc/datadog-agent/datadog.yaml
             sed -i 's/# logs_enabled: false/logs_enabled: true/' /etc/datadog-agent/datadog.yaml
-            wget -O /etc/datadog-agent/conf.d/tomcat.d/conf.yaml https://raw.githubusercontent.com/Jahia/jelastic-package/master/conf.yaml
+            wget -O /etc/datadog-agent/conf.d/tomcat.d/conf.yaml ${baseUrl}/conf.yaml
             chmod 555 /opt/tomcat/logs/catalina.out -R
             systemctl restart datadog-agent
         
