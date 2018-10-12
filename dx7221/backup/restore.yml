@@ -10,6 +10,10 @@ baseUrl: https://raw.githubusercontent.com/Jahia/jelastic-package-dev/master/dx7
 
 onBeforeInit: https://raw.githubusercontent.com/Jahia/jelastic-backup/master/scripts/restoreOnBeforeInit.js
 
+globals:
+  mngr_pass: ${settings.toolspwd}
+  su_pass: ${settings.rootpwd}
+  
 onInstall:
   - if (settings.envCreated != 'true'):
     - install:
@@ -77,3 +81,15 @@ actions:
 
 success:
   text: Application has been restored to the new environment **${settings.newEnvName}**!
+settings:
+  fields: 
+  - name: rootpwd
+    type: string
+    caption: Jahia DX root password
+    vtype: text
+    required: true
+  - name: toolspwd
+    type: string
+    caption: Jahia tools password
+    vtype: text
+    required: true  

@@ -10,15 +10,15 @@ description:
     your entire digital ecosystem to innovate and deliver great customer experiences,
     foster internal collaboration and support dynamic business needs for sustainable
     growth.
-baseUrl: https://raw.githubusercontent.com/Jahia/jelastic-package-dev/master/dx7221
+baseUrl: https://raw.githubusercontent.com/jelastic-jps/jahia/master
 globals:
   db_user: jahia-db-${fn.random}
   db_pass: ${fn.password(20)}
   redis_pass: ${fn.password(20)}
   mngr_user: manager
-  mngr_pass: ${settings.toolspwd}
-  su_pass: ${settings.rootpwd}
-  dx_version: 7.2.1.1
+  mngr_pass: ${fn.password(20)}
+  su_pass: ${fn.password(20)}
+  dx_version: 7.2.2.1
   package_type: dev
   xms: 2G
   java_opts:
@@ -80,12 +80,13 @@ nodes:
       XMS: ${globals.xms}
       _JAVA_OPTIONS: ${globals.java_opts}
       DATADOGAPIKEY: ${settings.ddogApikey}
-      DX_VERSION: ${globals.dx_version}
-      PACKAGE_TYPE: ${globals.package_type}
+      DX_VERSION: ${settings.dx_version}
+      PACKAGE_TYPE: ${settings.package_type}
+
 
 
   - nodeType: mariadb-dockerized
-    tag: 10.2.12 # 10.3.9
+    tag: 10.2.12
     displayName: MariaDB
     count: 1
     cloudlets: 64
@@ -96,10 +97,6 @@ nodes:
 # --Events --
 
 onInstall: 
-  - environment.control.ApplyNodeGroupData [proc]:
-      data: 
-        dxVersion: 7.2.1.1
-        packageType: dev  
   - setupSqlDB
   - if (settings.skipStart != 'true'): createJahiaDatabase
 
@@ -152,17 +149,18 @@ actions:
         wget -O setupUser.sh ${baseUrl}/scripts/setupUser.sh
         bash setupUser.sh ${globals.db_user} ${globals.db_pass}
       user: root 
+
   createJahiaDatabase:
     - cmd[sqldb]: |-
         mysql -u${globals.db_user} -p${globals.db_pass} -e "CREATE DATABASE IF NOT EXISTS jahia CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
       user: root
     - cmd[${nodes.proc.first.id}]: cat $DATA_PATH/digital-factory-data/db/sql/schema/mysql/*.sql | mysql -h mysqldb -u$DB_USER -p$DB_PASSWORD -f jahia
-
+    
   copyApp:  
     - cmd[${this}]: |-
         [ "${this}" == "proc" ] && role="processing" || role="browsing" 
         rm -rf $STACK_PATH/webapps/*
-        cp -rf $DATA_PATH/jahia/tomcat/webapps/* $STACK_PATH/webapps
+        cp -rf $DATA_PATH/jahia/$role/tomcat/webapps/* $STACK_PATH/webapps
         chown -R tomcat:tomcat $STACK_PATH/webapps
         
         cd /opt/tomcat/webapps/ROOT/WEB-INF/lib/
@@ -179,24 +177,11 @@ actions:
           cmd[${@i.id}]: |- 
             DD_API_KEY=${settings.ddogApikey} bash -c "$(curl -L https://raw.githubusercontent.com/DataDog/datadog-agent/master/cmd/agent/install_script.sh)"
             echo "hostname: ${this}.${@i.id}" >> /etc/datadog-agent/datadog.yaml
-            sed -i 's/# logs_enabled: false/logs_enabled: true/' /etc/datadog-agent/datadog.yaml
-            wget -O /etc/datadog-agent/conf.d/tomcat.d/conf.yaml ${baseUrl}/conf.yaml
-            chmod 555 /opt/tomcat/logs/catalina.out -R
             systemctl restart datadog-agent
         
 success: /text/success.md
 settings:
   fields: 
-  - name: rootpwd
-    type: string
-    caption: Jahia DX root password
-    vtype: text
-    required: true
-  - name: toolspwd
-    type: string
-    caption: Jahia tools password
-    vtype: text
-    required: true
   - name: ddog
     type: radio-fieldset
     values:
