@@ -18,6 +18,8 @@ onInstall:
         region: ${settings.targetRegion}
         settings:
           skipStart: 'true'
+          toolspwd: ${settings.toolsPwd}
+          rootpwd: ${settings.rootPwd}
     - install:
         jps: ${baseUrl}/backup/restore.yml?_r=${fn.random}
         envName: ${settings.newEnvName}
