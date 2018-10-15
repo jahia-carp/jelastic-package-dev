@@ -110,7 +110,7 @@ actions:
     - callScript: get-credentials
     - installScript:
         ftpUser: ${response.ftpUser}
-        ftpPassword: 1234567890
+        ftpPassword: ${response.ftpPassword}
         cronTime: ${this.cronTime}
         backupCount: ${this.backupCount}
         ftpHost: ${this.ftpHost}
