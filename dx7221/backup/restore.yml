@@ -81,12 +81,12 @@ success:
   text: Application has been restored to the new environment **${settings.newEnvName}**!
 settings:
   fields: 
-  - name: rootpwd
+  - name: rootPwd
     type: string
     caption: Jahia DX root password
     vtype: text
     required: true
-  - name: toolspwd
+  - name: toolsPwd
     type: string
     caption: Jahia tools password
     vtype: text
