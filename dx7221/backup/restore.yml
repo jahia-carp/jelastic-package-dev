@@ -10,10 +10,6 @@ baseUrl: https://raw.githubusercontent.com/Jahia/jelastic-package-dev/master/dx7
 
 onBeforeInit: https://raw.githubusercontent.com/Jahia/jelastic-backup/master/scripts/restoreOnBeforeInit.js
 
-globals:
-  mngr_pass: ${settings.toolspwd}
-  su_pass: ${settings.rootpwd}
-
 onInstall:
   - if (settings.envCreated != 'true'):
     - install:
@@ -22,8 +18,6 @@ onInstall:
         region: ${settings.targetRegion}
         settings:
           skipStart: 'true'
-          toolspwd: ${settings.toolsPwd}
-          rootpwd: ${settings.rootPwd}
     - install:
         jps: ${baseUrl}/backup/restore.yml?_r=${fn.random}
         envName: ${settings.newEnvName}
@@ -94,4 +88,4 @@ settings:
     type: string
     caption: Jahia tools password
     vtype: text
-    required: true  
+    required: true    
