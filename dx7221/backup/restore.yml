@@ -23,7 +23,7 @@ onInstall:
         settings:
           skipStart: 'true'
           toolspwd: ${settings.toolspwd}
-            rootpwd: ${settings.rootpwd}
+          rootpwd: ${settings.rootpwd}
     - install:
         jps: ${baseUrl}/backup/restore.yml?_r=${fn.random}
         envName: ${settings.newEnvName}
