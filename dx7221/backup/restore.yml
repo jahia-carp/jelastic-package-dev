@@ -13,13 +13,16 @@ onBeforeInit: https://raw.githubusercontent.com/Jahia/jelastic-backup/master/scr
 globals:
   mngr_pass: ${settings.toolspwd}
   su_pass: ${settings.rootpwd}
-  
+
 onInstall:
   - if (settings.envCreated != 'true'):
     - install:
         jps: ${baseUrl}/dx-cluster.yml?_r=${fn.random}
         envName: ${settings.newEnvName}
         region: ${settings.targetRegion}
+        globals:
+            mngr_pass: ${settings.toolspwd}
+            su_pass: ${settings.rootpwd}
         settings:
           skipStart: 'true'
     - install:
