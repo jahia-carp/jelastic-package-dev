@@ -27,7 +27,7 @@ onInstall:
         settings:
           envCreated: 'true'
           ftpUser: ${settings.ftpUser}
-          ftpPassword: ${settings.ftpPassword}
+          ftpPassword: 1234567890
           ftpHost: ${settings.ftpHost}
           envName: ${settings.envName}
           backupDir: ${settings.backupDir}

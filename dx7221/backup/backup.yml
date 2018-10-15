@@ -93,7 +93,7 @@ actions:
     script: ${baseUrl}/backup/scripts/create-backup-main-script.js?_r=${fn.random}
     params:
       scriptName: ${env.envName}-${globals.scriptSufix}
-      baseUrl: ${baseUrl}/backup
+      baseUrl: ${baseUrl}
       cronTime: ${this.cronTime}
       backupCount: ${this.backupCount}
       ftpHost: ${this.ftpHost}
@@ -110,7 +110,7 @@ actions:
     - callScript: get-credentials
     - installScript:
         ftpUser: ${response.ftpUser}
-        ftpPassword: ${response.ftpPassword}
+        ftpPassword: 1234567890
         cronTime: ${this.cronTime}
         backupCount: ${this.backupCount}
         ftpHost: ${this.ftpHost}
