@@ -20,11 +20,10 @@ onInstall:
         jps: ${baseUrl}/dx-cluster.yml?_r=${fn.random}
         envName: ${settings.newEnvName}
         region: ${settings.targetRegion}
-        globals:
-            mngr_pass: ${settings.toolspwd}
-            su_pass: ${settings.rootpwd}
         settings:
           skipStart: 'true'
+          toolspwd: ${settings.toolspwd}
+            rootpwd: ${settings.rootpwd}
     - install:
         jps: ${baseUrl}/backup/restore.yml?_r=${fn.random}
         envName: ${settings.newEnvName}
