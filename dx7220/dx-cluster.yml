@@ -18,7 +18,7 @@ globals:
   mngr_user: manager
   mngr_pass: ${settings.toolspwd}
   su_pass: ${settings.rootpwd}
-  dx_version: 7.2.1.1
+  dx_version: 7.2.2.0
   package_type: dev
   xms: 2G
   java_opts:
@@ -35,7 +35,7 @@ globals:
 ssl: true
 skipNodeEmails: true
 nodes:  
-  - image: jahiadev/browsing:7.2.1.1
+  - image: jahiadev/browsing:7.2.2.0
     displayName: Browsing
     count: 2
     cloudlets: 64
@@ -61,7 +61,7 @@ nodes:
       /data/digital-factory-data/repository/datastore:
         sourceNodeGroup: proc 
     
-  - image: jahiadev/processing:7.2.1.1
+  - image: jahiadev/processing:7.2.2.0
     displayName: Processing
     count: 1
     cloudlets: 64
@@ -98,7 +98,7 @@ nodes:
 onInstall: 
   - environment.control.ApplyNodeGroupData [proc]:
       data: 
-        dxVersion: 7.2.1.1
+        dxVersion: 7.2.2.0
         packageType: dev  
   - setupSqlDB
   - if (settings.skipStart != 'true'): createJahiaDatabase
