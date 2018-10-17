@@ -10,7 +10,7 @@ description:
     your entire digital ecosystem to innovate and deliver great customer experiences,
     foster internal collaboration and support dynamic business needs for sustainable
     growth.
-baseUrl: https://raw.githubusercontent.com/Jahia/jelastic-package-dev/master/dx7220
+baseUrl: https://raw.githubusercontent.com/Jahia/jelastic-package-dev/master/dx7231
 globals:
   db_user: jahia-db-${fn.random}
   db_pass: ${fn.password(20)}
@@ -18,7 +18,7 @@ globals:
   mngr_user: manager
   mngr_pass: ${settings.toolspwd}
   su_pass: ${settings.rootpwd}
-  dx_version: 7.2.2.0
+  dx_version: 7.2.3.1
   package_type: dev
   xms: 2G
   java_opts:
@@ -35,7 +35,7 @@ globals:
 ssl: true
 skipNodeEmails: true
 nodes:  
-  - image: jahiadev/browsing:7.2.2.0
+  - image: jahiadev/browsing:7.2.3.1
     displayName: Browsing
     count: 2
     cloudlets: 64
@@ -61,7 +61,7 @@ nodes:
       /data/digital-factory-data/repository/datastore:
         sourceNodeGroup: proc 
     
-  - image: jahiadev/processing:7.2.2.0
+  - image: jahiadev/processing:7.2.3.1
     displayName: Processing
     count: 1
     cloudlets: 64
@@ -98,7 +98,7 @@ nodes:
 onInstall: 
   - environment.control.ApplyNodeGroupData [proc]:
       data: 
-        dxVersion: 7.2.2.0
+        dxVersion: 7.2.3.1
         packageType: dev  
   - setupSqlDB
   - if (settings.skipStart != 'true'): createJahiaDatabase
