@@ -122,17 +122,15 @@ onInstall:
   - setupDatadogAgent: proc
   - setupDatadogAgent: mysqldb
 
-onBeforeServiceScaleOut[cp]: 
+onAfterServiceScaleOut[cp]: 
   forEach(event.response.nodes): 
     - copyApp: ${@i.id}
         
 onAfterRedeployContainer[cp]:
-   forEach(event.response.nodes): 
-    - copyApp: ${@i.id}   
+  - copyApp: cp
 
 onAfterRedeployContainer[proc]:
-   forEach(event.response.nodes): 
-    - copyApp: ${@i.id}           
+  - copyApp: proc        
 #-- Actions --
 
 actions:
