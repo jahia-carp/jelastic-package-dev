@@ -108,7 +108,7 @@ onInstall:
       nodeId: ${nodes.proc.first.id} 
 
   - sleep:
-    - milliseconds: 180000
+    - milliseconds: 120000
   
   - copyApp: cp
   - if (settings.skipStart != 'true'): 
