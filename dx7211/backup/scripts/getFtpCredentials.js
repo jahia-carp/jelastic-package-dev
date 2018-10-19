@@ -2,7 +2,7 @@
 
 var baseUrl = "${baseUrl}";
 
-var storage = use("scripts/useStorageApi.js");
+var storage = use("backup/scripts/useStorageApi.js");
 
 var userData = storage.getUserData();
 var ftpHost = storage.getFtpHost();    
