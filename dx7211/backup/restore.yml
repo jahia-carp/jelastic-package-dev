@@ -6,14 +6,15 @@ id: jahia-dem
 description:
   short: Jahia - Digital Experience Manager Restore
   text: Allows to restore your Jahia environment from existing backup
-baseUrl: https://raw.githubusercontent.com/Jahia/jelastic-package-dev/master/dx7211
+baseUrl: https://raw.githubusercontent.com/Jahia/jelastic-package-dev/master/dx7211/backup
+baseUrlPackage: https://raw.githubusercontent.com/Jahia/jelastic-package-dev/master/dx7211
 
 onBeforeInit: https://raw.githubusercontent.com/Jahia/jelastic-package-dev/master/dx7211/backup/scripts/restoreOnBeforeInit.js
 
 onInstall:
   - if (settings.envCreated != 'true'):
     - install:
-        jps: ${baseUrl}/dx-cluster.yml?_r=${fn.random}
+        jps: ${baseUrlPackage}/dx-cluster.yml?_r=${fn.random}
         envName: ${settings.newEnvName}
         region: ${settings.targetRegion}
         settings:
@@ -21,7 +22,7 @@ onInstall:
           toolspwd: ${settings.toolsPwd}
           rootpwd: ${settings.rootPwd}
     - install:
-        jps: ${baseUrl}/backup/restore.yml?_r=${fn.random}
+        jps: ${baseUrl}/restore.yml?_r=${fn.random}
         envName: ${settings.newEnvName}
         region: ${settings.targetRegion}
         settings:
@@ -38,7 +39,7 @@ onInstall:
         startPage: ${response.startPage}
         
   - if (settings.envCreated == 'true'): 
-     - script: ${baseUrl}/backup/scripts/getFtpCredentials.js?_r=${fn.random}
+     - script: ${baseUrl}/scripts/getFtpCredentials.js?_r=${fn.random}
      - restoreBackup:
          ftpUser: ${response.ftpUser}
          ftpPassword: ${response.ftpPassword}
