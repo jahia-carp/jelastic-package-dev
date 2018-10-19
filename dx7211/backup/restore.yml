@@ -8,7 +8,7 @@ description:
   text: Allows to restore your Jahia environment from existing backup
 baseUrl: https://raw.githubusercontent.com/Jahia/jelastic-package-dev/master/dx7211
 
-onBeforeInit: ${baseUrl}/scripts/restoreOnBeforeInit.js
+onBeforeInit: https://raw.githubusercontent.com/Jahia/jelastic-package-dev/master/dx7211/backup/scripts/restoreOnBeforeInit.js
 
 onInstall:
   - if (settings.envCreated != 'true'):
