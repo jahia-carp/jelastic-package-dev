@@ -21,7 +21,7 @@ onInstall:
           toolspwd: ${settings.toolsPwd}
           rootpwd: ${settings.rootPwd}
     - install:
-        jps: ${baseUrl}/restore.yml?_r=${fn.random}
+        jps: ${baseUrl}/backup/restore.yml?_r=${fn.random}
         envName: ${settings.newEnvName}
         region: ${settings.targetRegion}
         settings:
@@ -38,7 +38,7 @@ onInstall:
         startPage: ${response.startPage}
         
   - if (settings.envCreated == 'true'): 
-     - script: ${baseUrl}/scripts/getFtpCredentials.js?_r=${fn.random}
+     - script: ${baseUrl}/backup/scripts/getFtpCredentials.js?_r=${fn.random}
      - restoreBackup:
          ftpUser: ${response.ftpUser}
          ftpPassword: ${response.ftpPassword}
