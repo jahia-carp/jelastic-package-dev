@@ -52,14 +52,12 @@ nodes:
       XMS: ${globals.xms}
       _JAVA_OPTIONS: ${globals.java_opts}
       DATADOGAPIKEY: ${settings.ddogApikey}
-    volumes:
-      - /data/digital-factory-data/generated-resources
-      - /data/digital-factory-data/repository/datastore    
-    volumeMounts: 
-      /data/digital-factory-data/generated-resources:
-        sourceNodeGroup: proc
-      /data/digital-factory-data/repository/datastore:
-        sourceNodeGroup: proc 
+#    TO BE PUT BACK WHEN THE AUTOMATED UPGRADE STOP LOOKING FOR THE PROCESSING'S GENERATED RESOURCE FOLDER      
+#    volumes:
+#      - /data/digital-factory-data/generated-resources
+#    volumeMounts: 
+#      /data/digital-factory-data/generated-resources:
+#        sourceNodeGroup: proc
     
   - image: jahiadev/processing:7.2.3.0
     displayName: Processing
