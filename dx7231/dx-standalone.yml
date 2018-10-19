@@ -153,7 +153,7 @@ actions:
             DD_API_KEY=${settings.ddogApikey} bash -c "$(curl -L https://raw.githubusercontent.com/DataDog/datadog-agent/master/cmd/agent/install_script.sh)"
             echo "hostname: ${this}.${@i.id}" >> /etc/datadog-agent/datadog.yaml
             sed -i 's/# logs_enabled: false/logs_enabled: true/' /etc/datadog-agent/datadog.yaml
-            wget -O /etc/datadog-agent/conf.d/tomcat.d/conf.yaml https://raw.githubusercontent.com/Jahia/jelastic-package/master/conf.yaml
+            wget -O /etc/datadog-agent/conf.d/tomcat.d/conf.yaml https://raw.githubusercontent.com/Jahia/jelastic-package-dev/master/dx7231/conf.yaml
             chmod 555 /opt/tomcat/logs/catalina.out -R
             systemctl restart datadog-agent
         
