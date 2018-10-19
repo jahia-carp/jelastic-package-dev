@@ -57,6 +57,7 @@ actions:
         sed -i "s|^jahiaToolManagerPassword .*$|jahiaToolManagerPassword = $mngr_pwd|" $STACK_PATH/conf/digital-factory-config/jahia/jahia.properties
         echo $SUPER_USER_PASSWORD > $DATA_PATH/digital-factory-data/root.pwd
         chown -R tomcat:tomcat $DATA_PATH/digital-factory-data/root.pwd
+        touch $DATA_PATH/digital-factory-data/backup-restore
       user: root
       
     - cmd[es]: |-
