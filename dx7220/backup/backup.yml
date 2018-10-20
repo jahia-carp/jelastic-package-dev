@@ -6,10 +6,8 @@ id: jahia-dx-backup
 description: Backup for Jahia - Digital Experience Manager
 baseUrl: https://raw.githubusercontent.com/Jahia/jelastic-package-dev/master/dx7220
 
-
 targetNodes:
-  nodeGroup: proc
-  
+  nodeGroup: cp
 
 onBeforeInit: |
   var resp = jelastic.development.scripting.Eval(appid + "/settings", session, "GetSettings", { settings : "JAHIA_STORAGE_FTP_HOST" });
@@ -87,7 +85,7 @@ startPage: ${env.url}
 
 actions:
   installFTPClient:
-    cmd [proc]: yum -y install lftp
+    cmd [proc, es]: yum -y install lftp
 
   installScript:
     script: ${baseUrl}/backup/scripts/create-backup-main-script.js?_r=${fn.random}
@@ -114,4 +112,3 @@ actions:
         cronTime: ${this.cronTime}
         backupCount: ${this.backupCount}
         ftpHost: ${this.ftpHost}
-

@@ -11,7 +11,7 @@ function replaceText(text, values) {
 };
 
 function createScript(scriptName) {
-    var url = "https://raw.githubusercontent.com/jelastic-jps/jahia/master/scripts/storage/" + scriptName;
+    var url = "https://raw.githubusercontent.com/Jahia/jelastic-package-dev/master/dx7221/backup/scripts/storage/" + scriptName;
 
     try {
         scriptBody = new Transport().get(url);
