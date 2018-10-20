@@ -149,13 +149,13 @@ function BackupManager(config) {
     };
 
     me.initFtpCredentials = function initFtpCredentials() {
-	    var resp = new StorageApi(session).initFtpCredentials();
-	    var credentials = resp.credentials || {};
+        var resp = new StorageApi(session).initFtpCredentials();
+        var credentials = resp.credentials || {};
 
-	    config.ftpUser = credentials.ftpUser;
-	    config.ftpPassword = credentials.ftpPassword;
+        config.ftpUser = credentials.ftpUser;
+        config.ftpPassword = credentials.ftpPassword;
 
-	    return resp;
+        return resp;
     };
 
     me.createScript = function createScript() {
