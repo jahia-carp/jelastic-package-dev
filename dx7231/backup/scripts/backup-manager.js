@@ -101,29 +101,29 @@ function BackupManager(config) {
                 envName : config.envName,
                 maintenanceUrl : _("http://%(host)/modules/tools/maintenance.jsp?fullReadOnlyMode", { host : config.maintenanceHost }),
                 backupDir : backupDir
-            }],
-
-            [ me.cmd, [
-                "CT='Content-Type:application/json'",
-                "curl -H $CT -X PUT -d '{\"type\":\"fs\",\"settings\":{\"location\":\"all\"}}' '%(elasticSearchUrl)'",
-                "curl -H $CT -X DELETE '%(elasticSearchUrl)/snapshot'",
-                "curl -H $CT -X PUT '%(elasticSearchUrl)/snapshot?wait_for_completion=true'",
-                "tar -zcf es.tar.gz /var/lib/elasticsearch/backup/*",
-
-                lftp.cmd([
-                    "cd %(envName)/%(backupDir)",
-                    "put es.tar.gz"
-                ]),
-                'number_of_backups=$(' + lftp.cmd("ls %(envName)/") + '| wc -l)',
-                '[ "${number_of_backups}" -gt "%(backupCount)" ] && { let "number_for_deletion = ${number_of_backups} - %(backupCount)"; backups_for_deletion=$(' + lftp.cmd("ls %(envName)") + ' | awk \'{print $9}\'|head -$number_for_deletion ); } || true',
-                '[ -n "$backups_for_deletion" ] && { for i in $backups_for_deletion; do ' + lftp.cmd([ "cd %(envName)/", "rm -r $i" ]) + '; done ; } || true;'
-            ], {
-                nodeGroup: "es",
-                envName : config.envName,
-                elasticSearchUrl : _("http://%(host):9200/_snapshot/all", { host : config.elasticSearchHost }),
-                backupCount : config.backupCount,
-                backupDir : backupDir
             }]
+
+            // [ me.cmd, [
+            //     "CT='Content-Type:application/json'",
+            //     "curl -H $CT -X PUT -d '{\"type\":\"fs\",\"settings\":{\"location\":\"all\"}}' '%(elasticSearchUrl)'",
+            //     "curl -H $CT -X DELETE '%(elasticSearchUrl)/snapshot'",
+            //     "curl -H $CT -X PUT '%(elasticSearchUrl)/snapshot?wait_for_completion=true'",
+            //     "tar -zcf es.tar.gz /var/lib/elasticsearch/backup/*",
+
+            //     lftp.cmd([
+            //         "cd %(envName)/%(backupDir)",
+            //         "put es.tar.gz"
+            //     ]),
+            //     'number_of_backups=$(' + lftp.cmd("ls %(envName)/") + '| wc -l)',
+            //     '[ "${number_of_backups}" -gt "%(backupCount)" ] && { let "number_for_deletion = ${number_of_backups} - %(backupCount)"; backups_for_deletion=$(' + lftp.cmd("ls %(envName)") + ' | awk \'{print $9}\'|head -$number_for_deletion ); } || true',
+            //     '[ -n "$backups_for_deletion" ] && { for i in $backups_for_deletion; do ' + lftp.cmd([ "cd %(envName)/", "rm -r $i" ]) + '; done ; } || true;'
+            // ], {
+            //     nodeGroup: "es",
+            //     envName : config.envName,
+            //     elasticSearchUrl : _("http://%(host):9200/_snapshot/all", { host : config.elasticSearchHost }),
+            //     backupCount : config.backupCount,
+            //     backupDir : backupDir
+            // }]
         ]);
     };
 
