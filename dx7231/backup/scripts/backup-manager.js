@@ -89,10 +89,8 @@ function BackupManager(config) {
                     "mkdir %(envName)",
                     "mkdir %(envName)/%(backupDir)"
                 ]),
-                'wget --http-user=${MANAGER_USER} --http-password=${MANAGER_PASSWORD} -O - %(maintenanceUrl)=true',
                 'tar -zcf data.tar.gz /data',
                 'mysqldump --user=${DB_USER} --password=${DB_PASSWORD} -h mysqldb --single-transaction --quote-names --opt --databases --compress jahia > jahia.sql',
-                'wget --http-user=${MANAGER_USER} --http-password=${MANAGER_PASSWORD} -O - %(maintenanceUrl)=false',
                 lftp.cmd([
                     "cd %(envName)/%(backupDir)",
                     "put data.tar.gz",
