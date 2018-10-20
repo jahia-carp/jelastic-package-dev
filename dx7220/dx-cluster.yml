@@ -120,13 +120,15 @@ onInstall:
   - setupDatadogAgent: proc
   - setupDatadogAgent: mysqldb
 
-onBeforeServiceScaleOut[cp]: 
+onAfterServiceScaleOut[cp]: 
   forEach(event.response.nodes): 
     - copyApp: ${@i.id}
-      
-onBeforeServiceScaleOut[unomi]: updateHazelcast
-onBeforeScaleIn[unomi]: updateHazelcast   
         
+onAfterRedeployContainer[cp]:
+  - copyApp: cp
+
+onAfterRedeployContainer[proc]:
+  - copyApp: proc        
 #-- Actions --
 
 actions:
