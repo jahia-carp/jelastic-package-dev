@@ -37,7 +37,7 @@ skipNodeEmails: true
 nodes:  
   - image: jahiadev/browsing:7.2.2.1
     displayName: Browsing
-    count: 2
+    count: ${settings.browsingCount}
     cloudlets: 32
     nodeGroup: cp
     links: sqldb:mysqldb
@@ -190,6 +190,11 @@ settings:
   - name: rootpwd
     type: string
     caption: Jahia DX root password
+    vtype: text
+    required: true
+  - name: browsingCount
+    type: string
+    caption: Number of DX browsing nodes
     vtype: text
     required: true
   - name: toolspwd
