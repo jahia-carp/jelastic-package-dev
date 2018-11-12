@@ -38,7 +38,14 @@ jelastic.local.returnResult({
             "type": "string",
             "name": "targetRegion",
             "default": "jelastic_default_hw_group"
-            //,            "selectFirstAvailable": true
+        }, {
+            "caption": "Root Password",
+            "type": "string",
+            "name": "rootPwd",
+        }, {
+            "caption": "Tools password",
+            "type": "string",
+            "name": "toolsPwd",
         }]
     }
 });

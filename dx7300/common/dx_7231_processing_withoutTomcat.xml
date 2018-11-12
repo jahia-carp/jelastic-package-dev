@@ -26,19 +26,16 @@
 </com.izforge.izpack.panels.UserInputPanel>
 <com.izforge.izpack.panels.UserInputPanel id="dbType">
 <userInput>
-<entry key="dbSettings.dbms.type" value="mysql"/>
+<entry key="dbSettings.dbms.type" value="mariadb"/>
 </userInput>
 </com.izforge.izpack.panels.UserInputPanel>
 <com.izforge.izpack.panels.UserInputPanel id="dbTypeMySQL">
-<userInput>
-<entry key="mysql.driver.path" value="mysql-connector-java-5.1.44.jar"/>
-<entry key="mysql.driver.license" value="true"/>
-</userInput>
+<userInput/>
 </com.izforge.izpack.panels.UserInputPanel>
 <com.izforge.izpack.panels.UserInputPanel id="dbSettings">
 <userInput>
-<entry key="dbSettings.connection.driver.mysql" value="com.mysql.jdbc.Driver"/>
-<entry key="dbSettings.connection.url.mysql" value="jdbc:mysql://mysqldb/jahia?useUnicode=true&amp;characterEncoding=UTF-8&amp;useServerPrepStmts=false&amp;useSSL=false"/>
+<entry key="dbSettings.connection.driver.mariadb" value="org.mariadb.jdbc.Driver"/>
+<entry key="dbSettings.connection.url.mariadb" value="jdbc:mariadb://mysqldb/jahia?useUnicode=true&amp;characterEncoding=UTF-8&amp;useServerPrepStmts=false&amp;useSSL=false"/>
 <entry key="dbSettings.dbms.createTables" value="${CREATE_TABLE}"/>
 <entry key="dbSettings.connection.username" value="${DB_USER}"/>
 <entry key="dbSettings.dbms.storeFilesInDB" value="true"/>

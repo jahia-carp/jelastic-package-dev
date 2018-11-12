@@ -32,7 +32,7 @@ function run() {
 
 function use(script, config) {
     var Transport = com.hivext.api.core.utils.Transport,
-        url = baseUrl + "/" + script + "?_r=" + Math.random(),   
+        url = baseUrl + "/backup/" + script + "?_r=" + Math.random(),   
         body = new Transport().get(url);
     return new (new Function("return " + body)())(config);
 }

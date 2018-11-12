@@ -37,8 +37,8 @@ skipNodeEmails: true
 nodes:  
   - image: jahiadev/browsing:7.3.0.0
     displayName: Browsing
-    count: 2
-    cloudlets: 64
+    count: ${settings.browsingCount}
+    cloudlets: 32
     nodeGroup: cp
     links: sqldb:mysqldb
     startServiceOnCreation: false
@@ -52,19 +52,18 @@ nodes:
       XMS: ${globals.xms}
       _JAVA_OPTIONS: ${globals.java_opts}
       DATADOGAPIKEY: ${settings.ddogApikey}
-    volumes:
-      - /data/digital-factory-data/generated-resources
-      - /data/digital-factory-data/repository/datastore    
-    volumeMounts: 
-      /data/digital-factory-data/generated-resources:
-        sourceNodeGroup: proc
-      /data/digital-factory-data/repository/datastore:
-        sourceNodeGroup: proc 
+      JAHIA_OPERATING_MODE: production
+#    TO BE PUT BACK WHEN THE AUTOMATED UPGRADE STOP LOOKING FOR THE PROCESSING'S GENERATED RESOURCE FOLDER      
+#    volumes:
+#      - /data/digital-factory-data/generated-resources
+#    volumeMounts: 
+#      /data/digital-factory-data/generated-resources:
+#        sourceNodeGroup: proc
     
   - image: jahiadev/processing:7.3.0.0
     displayName: Processing
     count: 1
-    cloudlets: 64
+    cloudlets: 32
     nodeGroup: proc
     links: 
       - sqldb:mysqldb
@@ -82,13 +81,13 @@ nodes:
       DATADOGAPIKEY: ${settings.ddogApikey}
       DX_VERSION: ${globals.dx_version}
       PACKAGE_TYPE: ${globals.package_type}
-
+      JAHIA_OPERATING_MODE: production
 
   - nodeType: mariadb-dockerized
     tag: 10.2.12 # 10.3.9
     displayName: MariaDB
     count: 1
-    cloudlets: 64
+    cloudlets: 32
     nodeGroup: sqldb    
     env:
       DATADOGAPIKEY: ${settings.ddogApikey}
@@ -122,13 +121,16 @@ onInstall:
   - setupDatadogAgent: proc
   - setupDatadogAgent: mysqldb
 
-onBeforeServiceScaleOut[cp]: 
+onAfterServiceScaleOut[cp]: 
   forEach(event.response.nodes): 
     - copyApp: ${@i.id}
-      
-onBeforeServiceScaleOut[unomi]: updateHazelcast
-onBeforeScaleIn[unomi]: updateHazelcast   
         
+onAfterRedeployContainer[cp]:
+  - copyApp: cp
+
+onAfterRedeployContainer[proc]:
+  - copyApp: proc        
+#-- Actions --
 #-- Actions --
 
 actions:
@@ -190,6 +192,11 @@ settings:
   - name: rootpwd
     type: string
     caption: Jahia DX root password
+    vtype: text
+    required: true
+  - name: browsingCount
+    type: string
+    caption: Number of DX browsing nodes
     vtype: text
     required: true
   - name: toolspwd
