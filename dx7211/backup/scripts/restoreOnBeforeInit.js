@@ -36,8 +36,8 @@ jelastic.local.returnResult({
         }, {
             "caption": "Target region",
             "type": "regionlist",
-            "name": "targetRegion",
-            "selectFirstAvailable": true
+            "name": "targetRegion"
+            //,            "selectFirstAvailable": true
         }]
     }
 });

@@ -88,6 +88,12 @@ settings:
     caption: Jahia DX root password
     vtype: text
     required: true
+  - name: targetRegion
+    type: string
+    caption: Target region
+    vtype: text
+    default: jelastic_default_hw_group
+    required: true
   - name: toolsPwd
     type: string
     caption: Jahia tools password
