@@ -35,8 +35,9 @@ jelastic.local.returnResult({
             "dependsOn": "targetRegion"
         }, {
             "caption": "Target region",
-            "type": "regionlist",
-            "name": "targetRegion"
+            "type": "string",
+            "name": "targetRegion",
+            "default": "jelastic_default_hw_group"
             //,            "selectFirstAvailable": true
         }]
     }
