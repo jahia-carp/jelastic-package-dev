@@ -1,4 +1,4 @@
-#! /bin/sh
+ #! /bin/sh
 
 # ------------------------------------------------------------------------
 # Licensed to the Apache Software Foundation (ASF) under one or more
@@ -29,20 +29,20 @@ APP_NAME="karaf"
 APP_LONG_NAME="karaf"
 
 # Wrapper
-WRAPPER_CMD="/opt/unomi/unomi-1.1.3-jahia/bin/${APP_NAME}-wrapper"
-STARTUP_CMD="/opt/unomi/unomi-1.1.3-jahia/bin/start"
-STOP_CMD="/opt/unomi/unomi-1.1.3-jahia/bin/stop"
-WRAPPER_CONF="/opt/unomi/unomi-1.1.3-jahia/etc/${APP_NAME}-wrapper.conf"
+WRAPPER_CMD="/opt/unomi/unomi-1.3.2-jahia/bin/${APP_NAME}-wrapper"
+STARTUP_CMD="/opt/unomi/unomi-1.3.2-jahia/bin/start"
+STOP_CMD="/opt/unomi/unomi-1.3.2-jahia/bin/stop"
+WRAPPER_CONF="/opt/unomi/unomi-1.3.2-jahia/etc/${APP_NAME}-wrapper.conf"
 
 # Priority at which to run the wrapper.  See "man nice" for valid priorities.
 #  nice is only used if a priority is specified.
 PRIORITY=
 
 # Location of the data folder.
-DATADIR="/opt/unomi/unomi-1.1.3-jahia/data"
+DATADIR="/opt/unomi/unomi-1.3.2-jahia/data"
 
 # Location of the pid file.
-PIDDIR="/opt/unomi/unomi-1.1.3-jahia/data"
+PIDDIR="/opt/unomi/unomi-1.3.2-jahia/data"
 
 
 checkUser() {
