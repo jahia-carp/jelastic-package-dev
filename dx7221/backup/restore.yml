@@ -2,7 +2,7 @@ type: install
 version: 1.5
 name: Jahia - Digital Experience Manager Restore
 logo: /images/jahia-restore-logo-70x70.png
-id: jahia-dem
+id: jahia-dem-restore-7221
 description:
   short: Jahia - Digital Experience Manager Restore
   text: Allows to restore your Jahia environment from existing backup

@@ -2,7 +2,7 @@ type: update
 version: 1.5
 name: Backup for Jahia DEM
 logo: /images/jahia-backup-logo-70x70.png
-id: jahia-dx-backup
+id: jahia-dx-backup-7211
 description: Backup for Jahia - Digital Experience Manager
 baseUrl: https://raw.githubusercontent.com/Jahia/jelastic-package-dev/master/dx7211
 

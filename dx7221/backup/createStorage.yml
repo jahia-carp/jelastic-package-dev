@@ -2,7 +2,7 @@ type: install
 version: 1.5
 name: Jahia - Digital Experience Manager Backup Storage
 logo: https://goo.gl/Lnkgme
-id: jahia-dem
+id: jahia-dem-stor-7221
 description:
   short: Jahia - Digital Experience Manager Backup Storage
   text: Creates the FTP server for storing the user backups
