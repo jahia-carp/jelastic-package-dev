@@ -6,7 +6,7 @@ id: jahia-dem-stor-7300
 description:
   short: Jahia - Digital Experience Manager Backup Storage
   text: Creates the FTP server for storing the user backups
-baseUrl: https://raw.githubusercontent.com/Jahia/jelastic-package-dev/master/dx7300
+baseUrl: https://raw.githubusercontent.com/Jahia/jelastic-package-dev/master/dx7300_mf110
 
 
 nodes:

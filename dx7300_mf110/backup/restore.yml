@@ -6,7 +6,7 @@ id: jahia-dem-restore-7300
 description:
   short: Jahia - Digital Experience Manager Restore
   text: Allows to restore your Jahia environment from existing backup
-baseUrl: https://raw.githubusercontent.com/Jahia/jelastic-package-dev/master/dx7300
+baseUrl: https://raw.githubusercontent.com/Jahia/jelastic-package-dev/master/dx7300_mf110
 
 onBeforeInit: https://raw.githubusercontent.com/Jahia/jelastic-package-dev/master/dx7231/backup/scripts/restoreOnBeforeInit.js
 
