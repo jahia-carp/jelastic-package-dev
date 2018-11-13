@@ -1,0 +1,6 @@
+---
+logs:
+     - type: file
+       path: /opt/tomcat/logs/catalina.out
+       source: tomcat
+       service: myservice
