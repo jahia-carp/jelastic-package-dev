@@ -155,11 +155,7 @@ onBeforeScaleIn[unomi]: updateHazelcast
 #-- Actions --
 
 actions:
-  updateHazelcast:
-    - forEach(nodes.unomi):
-        appendNode: ${@i.id}
-    
-       
+ 
   appendNode:
     setGlobals: 
       - ids: ${globals.ids:}${globals.sep:}${this}
