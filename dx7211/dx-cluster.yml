@@ -21,6 +21,7 @@ globals:
   dx_version: 7.2.1.1
   package_type: dev
   xms: 2G
+  xmx: 3.5G
   java_opts:
     -DDB_USER=${DB_USER}
     -DDB_PASSWORD=${DB_PASSWORD}
@@ -50,6 +51,7 @@ nodes:
       SUPER_USER_PASSWORD: ${globals.su_pass}
       REDIS_PASSWORD: ${globals.redis_pass}
       XMS: ${globals.xms}
+      XMX: ${globals.xmx}
       _JAVA_OPTIONS: ${globals.java_opts}
       DATADOGAPIKEY: ${settings.ddogApikey}
       JAHIA_OPERATING_MODE: production
@@ -77,6 +79,7 @@ nodes:
       SUPER_USER_PASSWORD: ${globals.su_pass}
       REDIS_PASSWORD: ${globals.redis_pass}
       XMS: ${globals.xms}
+      XMX: ${globals.xmx}
       _JAVA_OPTIONS: ${globals.java_opts}
       DATADOGAPIKEY: ${settings.ddogApikey}
       DX_VERSION: ${globals.dx_version}
