@@ -251,7 +251,7 @@ settings:
         - name: ddogApikey
           type: string
           caption: Datadog API KEY
-          default: 8f0af047f681f99d4d9f98e28b1d2092
+          default: 3b948a516a5d6378b676b8ee8beaadc7
           required: true
           vtype: text
         
