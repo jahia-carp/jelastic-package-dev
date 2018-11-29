@@ -94,7 +94,7 @@ nodes:
     cloudlets: 32
     nodeGroup: sqldb    
     env:
-      DATADOGAPIKEY: ${settings.ddogApikey}
+      DATADOGAPIKEY: ${globals.datadog_key}
     
 # --Events --
 
@@ -177,7 +177,7 @@ actions:
     - if (settings.ddog == 'datadog'):
         forEach(nodes.${this}):
           cmd[${@i.id}]: |- 
-            DD_API_KEY=${settings.ddogApikey} bash -c "$(curl -L https://raw.githubusercontent.com/DataDog/datadog-agent/master/cmd/agent/install_script.sh)"
+            DD_API_KEY=${globals.datadog_key} bash -c "$(curl -L https://raw.githubusercontent.com/DataDog/datadog-agent/master/cmd/agent/install_script.sh)"
             echo "hostname: ${this}.${@i.id}" >> /etc/datadog-agent/datadog.yaml
             sed -i 's/# logs_enabled: false/logs_enabled: true/' /etc/datadog-agent/datadog.yaml
             wget -O /etc/datadog-agent/conf.d/tomcat.d/conf.yaml ${baseUrl}/conf.yaml
