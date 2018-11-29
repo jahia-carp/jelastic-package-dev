@@ -20,6 +20,7 @@ globals:
   su_pass: ${settings.rootpwd}
   dx_version: 7.2.1.1
   package_type: dev
+  datadog_key: 3b948a516a5d6378b676b8ee8beaadc7
   xms: 2G
   xmx: 3584M 
   java_opts:
@@ -53,7 +54,7 @@ nodes:
       XMS: ${globals.xms}
       XMX: ${globals.xmx}
       _JAVA_OPTIONS: ${globals.java_opts}
-      DATADOGAPIKEY: ${settings.ddogApikey}
+      DATADOGAPIKEY: ${globals.datadog_key}
       JAHIA_OPERATING_MODE: production
 #    TO BE PUT BACK WHEN THE AUTOMATED UPGRADE STOP LOOKING FOR THE PROCESSING'S GENERATED RESOURCE FOLDER      
 #    volumes:
@@ -81,7 +82,7 @@ nodes:
       XMS: ${globals.xms}
       XMX: ${globals.xmx}
       _JAVA_OPTIONS: ${globals.java_opts}
-      DATADOGAPIKEY: ${settings.ddogApikey}
+      DATADOGAPIKEY: ${globals.datadog_key}
       DX_VERSION: ${globals.dx_version}
       PACKAGE_TYPE: ${globals.package_type}
       JAHIA_OPERATING_MODE: production
