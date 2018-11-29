@@ -21,7 +21,7 @@ globals:
   dx_version: 7.2.1.1
   package_type: dev
   xms: 2G
-  xmx: 3.5G
+  xmx: 3584M 
   java_opts:
     -DDB_USER=${DB_USER}
     -DDB_PASSWORD=${DB_PASSWORD}
