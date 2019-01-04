@@ -38,7 +38,7 @@ jelastic.local.returnResult({
             "type": "regionlist",
             "selectFirstAvailable": true,
             "name": "targetRegion",
-            "default": "jelastic_default_hw_group"
+            "default": "default_hn_group"
         }, {
             "caption": "Root Password",
             "type": "string",

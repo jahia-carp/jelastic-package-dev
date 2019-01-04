@@ -92,7 +92,7 @@ settings:
     type: string
     caption: Target region
     vtype: text
-    default: jelastic_default_hw_group
+    default: default_hn_group
     required: true
   - name: toolsPwd
     type: string
