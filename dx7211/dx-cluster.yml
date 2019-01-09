@@ -40,7 +40,7 @@ nodes:
   - image: jahiadev/browsing:7.2.1.1
     displayName: Browsing
     count: ${settings.browsingCount}
-    cloudlets: 32
+    cloudlets: 40
     nodeGroup: cp
     links: sqldb:mysqldb
     startServiceOnCreation: false
@@ -66,7 +66,7 @@ nodes:
   - image: jahiadev/processing:7.2.1.1
     displayName: Processing
     count: 1
-    cloudlets: 32
+    cloudlets: 40
     nodeGroup: proc
     links: 
       - sqldb:mysqldb
@@ -91,7 +91,7 @@ nodes:
     tag: 10.2.12 # 10.3.9
     displayName: MariaDB
     count: 1
-    cloudlets: 32
+    cloudlets: 40
     nodeGroup: sqldb    
     env:
       DATADOGAPIKEY: ${globals.datadog_key}
