@@ -132,7 +132,7 @@ onAfterRedeployContainer[proc]:
   - copyApp: proc        
 #-- Actions --
   
-       
+actions:       
   appendNode:
     setGlobals: 
       - ids: ${globals.ids:}${globals.sep:}${this}
